@@ -1,4 +1,4 @@
-# A simple CPP template.
+# A simple API tester using socket.
 
 > ⚠️ WARNING: This template is unstable, use with caution.
 
@@ -25,7 +25,7 @@ make
 make clean
 ```
 
-[Makefile template ref:](https://makefiletutorial.com/#makefile-cookbook)
+[Makefile template link](https://makefiletutorial.com/#makefile-cookbook)
 
 ## Program
 
