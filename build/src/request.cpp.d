@@ -1,3 +1,5 @@
-build/./src/request.cpp.o: src/request.cpp src/request.h src/helper.h
+build/./src/request.cpp.o: src/request.cpp src/request.h src/helpers.h \
+ src/utils.h
 src/request.h:
-src/helper.h:
+src/helpers.h:
+src/utils.h:

@@ -3,7 +3,7 @@
 BUILD_DIR = ./build
 SRC_DIRS := ./src
 
-TARGET := $(SRC_DIRS)/19127631
+TARGET := "19127631"
 
 # Find all the C and C++ files we want to compile
 # Note the single quotes around the * expressions. Make will incorrectly expand these otherwise.

@@ -1,15 +1,4 @@
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
-#include <netdb.h>
-#include <netinet/in.h>
-#include <netinet/tcp.h>
-#include <request.h>
-#include <sys/socket.h>
-#include <sys/types.h>
+#include <main.h>
 
 int socket_connect(char *host, in_port_t port) {
   struct hostent *hp;
@@ -42,31 +31,26 @@ int socket_connect(char *host, in_port_t port) {
 #define BUFFER_SIZE 1024
 
 int main(int argc, char *argv[]) {
-  //   int fd;
-  //   char buffer[BUFFER_SIZE];
+  int fd;
+  char buffer[BUFFER_SIZE];
 
-  //   if (argc < 3) {
-  //     fprintf(stderr, "Usage: %s <hostname> <port>\n", argv[0]);
-  //     exit(1);
-  //   }
+  if (argc < 3) {
+    fprintf(stderr, "Usage: %s <hostname> <port>\n", argv[0]);
+    exit(1);
+  }
+  fd = socket_connect(argv[1], atoi(argv[2]));
+  string req = get("/", {{"Host: example.com"}}).c_str();
+  write(fd, (const void *)req.c_str(),
+        req.length()); // write(fd, char[]*, len);
+  bzero(buffer, BUFFER_SIZE);
 
-  //   fd = socket_connect(argv[1], atoi(argv[2]));
-  //   write(
-  //       fd, "GET /Chunked HTTP/1.1\r\nHost:
-  //       anglesharp.azurewebsites.net\r\n\r\n", strlen(
-  //           "GET /Chunked HTTP/1.1\r\nHost: "
-  //           "anglesharp.azurewebsites.net\r\n\r\n")); // write(fd, char[]*,
-  //           len);
-  //   bzero(buffer, BUFFER_SIZE);
+  while (recv(fd, buffer, BUFFER_SIZE - 1, MSG_DONTWAIT) != 0) {
+    // fprintf(stderr, "%s", buffer);
+    bzero(buffer, BUFFER_SIZE);
+  }
 
-  //   while (read(fd, buffer, BUFFER_SIZE - 1) != 0) {
-  //     fprintf(stderr, "%s", buffer);
-  //     bzero(buffer, BUFFER_SIZE);
-  //   }
+  shutdown(fd, SHUT_RDWR);
+  close(fd);
 
-  //   shutdown(fd, SHUT_RDWR);
-  //   close(fd);
-
-  cout << get("google.com");
   return 0;
 }

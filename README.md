@@ -52,8 +52,8 @@ Ref: [C and Cpp Debugging in VS Code](https://github.com/bloominstituteoftechnol
       "name": "g++ - Build and debug active file",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${fileDirname}/19127631",
-      "args": [],
+      "program": "${workspaceFolder}/19127631",
+      "args": ["example.com", "80"],
       "stopAtEntry": false,
       "cwd": "${fileDirname}",
       "environment": [],
@@ -89,8 +89,8 @@ Ref: [C and Cpp Debugging in VS Code](https://github.com/bloominstituteoftechnol
   "tasks": [
     {
       "label": "build",
-      "command": "gcc",
-      "args": ["-Wall", "helloWorld.c", "-o", "helloWorld"],
+      "command": "make",
+      "args": [],
       "problemMatcher": {
         "owner": "cpp",
         "fileLocation": ["relative", "${workspaceFolder}"],
