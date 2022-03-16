@@ -8,7 +8,7 @@
 using namespace std;
 
 string get(string uri,
-           vector<vector<string>> headers = vector<vector<string>>(),
+           vector<vector<string>> headers = vector<vector<string>>{},
            string body = "");
 
 #endif

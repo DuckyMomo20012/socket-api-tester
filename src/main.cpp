@@ -29,28 +29,45 @@ int socket_connect(char *host, in_port_t port) {
 }
 
 #define BUFFER_SIZE 1024
+#define PORT 80
 
 int main(int argc, char *argv[]) {
   int fd;
   char buffer[BUFFER_SIZE];
+  string web{argv[1]};
+  string outFile{argv[2]};
 
   if (argc < 3) {
-    fprintf(stderr, "Usage: %s <hostname> <port>\n", argv[0]);
+    fprintf(stderr, "Usage: %s <http website> <output file>\n", argv[0]);
     exit(1);
   }
-  fd = socket_connect(argv[1], atoi(argv[2]));
-  string req = get("/", {{"Host: example.com"}}).c_str();
+  if (web.find("https") != web.npos) {
+    cerr << "Please input a http website" << endl;
+    exit(1);
+  }
+  fd = socket_connect(argv[1], PORT);
+  string req = get("/", {{"Host: example.com"}});
   write(fd, (const void *)req.c_str(),
         req.length()); // write(fd, char[]*, len);
   bzero(buffer, BUFFER_SIZE);
 
-  while (recv(fd, buffer, BUFFER_SIZE - 1, MSG_DONTWAIT) != 0) {
+  while (read(fd, buffer, BUFFER_SIZE - 1) > 0) {
+    string buff(buffer);
+    string endHeader = "\r\n\r\n";
+    int pos = buff.find(endHeader);
+    if (pos > 0) {
+      string sub = buff.substr(pos + endHeader.length(), buff.length());
+      cout << sub;
+      writeFile(outFile, sub, ios::trunc);
+    } else {
+      cout << buff;
+      writeFile(outFile, buff, ios::app);
+    }
     // fprintf(stderr, "%s", buffer);
     bzero(buffer, BUFFER_SIZE);
   }
 
   shutdown(fd, SHUT_RDWR);
   close(fd);
-
   return 0;
 }

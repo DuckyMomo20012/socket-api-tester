@@ -1,7 +1,8 @@
 # Ref: Thanks to Job Vranish (https://spin.atomicobject.com/2016/08/26/makefile-c-projects/)
 .EXPORT_ALL_VARIABLES:
-BUILD_DIR = ./build
+BUILD_DIR = ./.build
 SRC_DIRS := ./src
+CPP_VER := -std=c++17
 
 TARGET := "19127631"
 
@@ -25,7 +26,7 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 # The -MMD and -MP flags together generate Makefiles for us!
 # These files will have .d instead of .o as the output.
-CPPFLAGS := $(INC_FLAGS) -MMD -MP -g -Wall -std=c++17
+CPPFLAGS := $(INC_FLAGS) -MMD -MP -g -Wall $(CPP_VER)
 
 all: $(TARGET)
 

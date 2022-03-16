@@ -18,3 +18,22 @@ pair<string, string> headerParse(string header) {
   pair<string, string> res = make_pair(key, value);
   return res;
 }
+
+void writeFile(string fileName, string buffer, ios_base::openmode mode) {
+  fstream writeFile;
+  writeFile.open(fileName, ios::out | mode);
+  if (writeFile.is_open()) {
+    writeFile << buffer;
+  } else {
+    string errMsg = "Cannot open file: " + fileName + "\n";
+    throw invalid_argument(errMsg);
+  }
+  writeFile.close();
+}
+
+void readFile(string fileName, string &buffer) {
+  fstream readFile;
+  readFile.open(fileName, ios::in);
+  readFile >> buffer;
+  readFile.close();
+}
