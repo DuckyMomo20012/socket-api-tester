@@ -6,12 +6,12 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "helpers.h"
+#include "request.h"
 #include <fstream>
-#include <helpers.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
-#include <request.h>
 #include <sstream>
 #include <sys/socket.h>
 #include <sys/types.h>

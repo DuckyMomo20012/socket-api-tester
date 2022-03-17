@@ -1,4 +1,4 @@
-#include <main.h>
+#include "main.h"
 
 int socket_connect(char *host, in_port_t port) {
   struct hostent *hp;
@@ -29,38 +29,55 @@ int socket_connect(char *host, in_port_t port) {
 }
 
 #define BUFFER_SIZE 1024
-#define PORT 80
+#define PORT 80 // http use port 80
 
 int main(int argc, char *argv[]) {
   int fd;
   char buffer[BUFFER_SIZE];
   string web{argv[1]};
   string outFile{argv[2]};
+  string host{argv[1]};
 
   if (argc < 3) {
     fprintf(stderr, "Usage: %s <http website> <output file>\n", argv[0]);
     exit(1);
   }
-  if (web.find("https") != web.npos) {
+  if (web.find("https://") != web.npos) {
     cerr << "Please input a http website" << endl;
     exit(1);
+  } else if (web.find("http://") != web.npos) {
+    int pos = web.find("http://");
+    // Minus 1 for ("/") character;
+    host = host.substr(pos + strlen("http://"),
+                       host.length() - pos - strlen("http://") - 1);
   }
-  fd = socket_connect(argv[1], PORT);
-  string req = get("/", {{"Host: example.com"}});
+  // Because socket connect using host, so we have to extract it from website,
+  // which is inputed from command.
+  fd = socket_connect(const_cast<char *>(host.c_str()), PORT);
+  string req = get("/", {{"Host", host}});
+
   write(fd, (const void *)req.c_str(),
         req.length()); // write(fd, char[]*, len);
   bzero(buffer, BUFFER_SIZE);
 
+  // Always truncate file first
+  writeFile(outFile, "", ios::trunc);
+  cout << "Writing data to: " << outFile << endl;
+  // Sometimes header is too big for buffer, so we can't find "\r\n\r\n". When
+  // we found it, we mark as the file is opened and write data to file, discard
+  // those headers.
+  bool isFileOpened = false;
   while (read(fd, buffer, BUFFER_SIZE - 1) > 0) {
     string buff(buffer);
     string endHeader = "\r\n\r\n";
     int pos = buff.find(endHeader);
     if (pos > 0) {
+      isFileOpened = true;
       string sub = buff.substr(pos + endHeader.length(), buff.length());
-      cout << sub;
-      writeFile(outFile, sub, ios::trunc);
-    } else {
-      cout << buff;
+      // cout << sub;
+      writeFile(outFile, sub, ios::app);
+    } else if (isFileOpened) {
+      // cout << buff;
       writeFile(outFile, buff, ios::app);
     }
     // fprintf(stderr, "%s", buffer);

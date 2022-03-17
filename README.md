@@ -53,7 +53,7 @@ Ref: [C and Cpp Debugging in VS Code](https://github.com/bloominstituteoftechnol
       "type": "cppdbg",
       "request": "launch",
       "program": "${workspaceFolder}/19127631",
-      "args": ["example.com", "80"],
+      "args": ["example.com", "out.txt"],
       "stopAtEntry": false,
       "cwd": "${fileDirname}",
       "environment": [],
