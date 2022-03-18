@@ -42,6 +42,10 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "Usage: %s <http website> <output file>\n", argv[0]);
     exit(1);
   }
+  if (outFile.find(".txt") == outFile.npos) {
+    cout << "WARNING: You should write data to text file (.txt) instead of "
+         << "\"" << outFile << "\"" << endl;
+  }
   if (web.find("https://") != web.npos) {
     cerr << "Please input a http website" << endl;
     exit(1);
@@ -54,7 +58,7 @@ int main(int argc, char *argv[]) {
   // Because socket connect using host, so we have to extract it from website,
   // which is inputed from command.
   fd = socket_connect(const_cast<char *>(host.c_str()), PORT);
-  string req = get("/", {{"Host", host}});
+  string req = get("/", {{"Host", host}, {"Connection: Keep-alive"}});
 
   write(fd, (const void *)req.c_str(),
         req.length()); // write(fd, char[]*, len);

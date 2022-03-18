@@ -13,7 +13,17 @@
   </tr>
 </table>
 
+## Description:
+
+This program will send ONLY HTTP request to server and receive response.
+Response data is extracted to output file (text file is recommended) and header
+is not saved.
+
+Currently this program only have GET request mode.
+
 ## How to build:
+
+This will compile program which is targeted in [Makefile](https://github.com/DuckyMomo20012/socket-api-tester/blob/master/Makefile#L7).
 
 ```bash
 make
@@ -21,20 +31,24 @@ make
 
 ## Cleanup build:
 
+This command will delete .build folder and compiled program.
+
 ```bash
 make clean
 ```
 
 [Makefile template link](https://makefiletutorial.com/#makefile-cookbook)
 
-## Program
+## Program Requirements:
 
 Your linux should have installed these packages:
 
 - gcc
 - gdb
 
-## Debug
+## Debug:
+
+This is debug file. You can change "args" arguments in launch.json.
 
 Ref: [C and Cpp Debugging in VS Code](https://github.com/bloominstituteoftechnology/CS-Wiki/wiki/C-and-Cpp-Debugging-in-VS-Code)
 
