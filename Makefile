@@ -32,6 +32,7 @@ all: $(TARGET)
 
 # The final build step.
 $(TARGET): $(OBJS)
+	mkdir -p log
 	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
 
 # Build step for C++ source

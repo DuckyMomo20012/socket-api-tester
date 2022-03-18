@@ -37,6 +37,8 @@ int main(int argc, char *argv[]) {
   string web{argv[1]};
   string outFile{argv[2]};
   string host{argv[1]};
+  string headerFile = "log/header.txt";
+  string requestFile = "log/request.txt";
 
   if (argc < 3) {
     fprintf(stderr, "Usage: %s <http website> <output file>\n", argv[0]);
@@ -59,6 +61,7 @@ int main(int argc, char *argv[]) {
   // which is inputed from command.
   fd = socket_connect(const_cast<char *>(host.c_str()), PORT);
   string req = get("/", {{"Host", host}, {"Connection: Keep-alive"}});
+  writeFile(requestFile, req, ios::app);
 
   write(fd, (const void *)req.c_str(),
         req.length()); // write(fd, char[]*, len);
@@ -66,6 +69,7 @@ int main(int argc, char *argv[]) {
 
   // Always truncate file first
   writeFile(outFile, "", ios::trunc);
+  writeFile(headerFile, "", ios::trunc);
   cout << "Writing data to: " << outFile << endl;
   // Sometimes header is too big for buffer, so we can't find "\r\n\r\n". When
   // we found it, we mark as the file is opened and write data to file, discard
@@ -74,15 +78,32 @@ int main(int argc, char *argv[]) {
   while (read(fd, buffer, BUFFER_SIZE - 1) > 0) {
     string buff(buffer);
     string endHeader = "\r\n\r\n";
+    // TODO: Optimize header detection
     int pos = buff.find(endHeader);
+
+    // cout << buff;
     if (pos > 0) {
       isFileOpened = true;
+      string header = buff.substr(0, pos + endHeader.length());
       string sub = buff.substr(pos + endHeader.length(), buff.length());
-      // cout << sub;
+
       writeFile(outFile, sub, ios::app);
+      // If header is equal buff, that means at the end of buff can have
+      // \r\n\r\n, leads to data is not written to outFile.
+      // REVIEW: This could be a bug too
+      if (header == buff and buff.find("Content-Length: 0") == buff.npos) {
+        writeFile(outFile, buff, ios::app);
+      } else {
+        // Some buffers will have \r\n\r\n at the end
+        // If header == buff then it might be a 301 response with empty data.
+        writeFile(headerFile, header, ios::app);
+      }
     } else if (isFileOpened) {
       // cout << buff;
       writeFile(outFile, buff, ios::app);
+    } else {
+      // cout << buff;
+      writeFile(headerFile, buff, ios::app);
     }
     // fprintf(stderr, "%s", buffer);
     bzero(buffer, BUFFER_SIZE);
