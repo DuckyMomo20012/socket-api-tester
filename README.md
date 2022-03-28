@@ -17,7 +17,7 @@
 
 This program will send ONLY HTTP request to server and receive response.
 Response data is extracted to output file (text file is recommended) and header
-is saved to log/header.txt.
+is saved to `log/header.txt`.
 
 Currently this program only have GET request mode.
 
@@ -43,7 +43,7 @@ make clean
 
 Your linux should have installed these packages:
 
-- gcc
+- gcc, g++
 - gdb
 
 ## Debug:
@@ -126,4 +126,4 @@ Ref: [C and Cpp Debugging in VS Code](https://github.com/bloominstituteoftechnol
 
 ## TODO:
 
-[ ] Optimize header detection part.
+- [ ] Optimize header detection part.
