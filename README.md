@@ -1,4 +1,4 @@
-# A simple API tester using socket.
+# A simple http client using socket
 
 > ⚠️ WARNING: This template is unstable, use with caution.
 
