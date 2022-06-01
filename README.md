@@ -1,29 +1,40 @@
-# A simple http client using socket
+# A simple HTTP client using socket
 
-> ⚠️ WARNING: This template is unstable, use with caution.
+Simulate GET request using socket
+
+## Environment:
+
+CPP version: `c++17`
 
 <table>
   <tr>
-    <th>Language</th>
-    <td>C++17</td>
+    <th>OS</th>
+    <th>gcc, g++</th>
+    <th>Tested</th>
   </tr>
   <tr>
-    <th>OS</th>
     <td>Debian 11</td>
+    <td>10.2.1</td>
+    <td>Passed ✔</td>
+  </tr>
+  <tr>
+    <td>Ubuntu 22.04</td>
+    <td>11.2.0</td>
+    <td>Passed ✔</td>
   </tr>
 </table>
 
 ## Description:
 
-This program will send ONLY HTTP request to server and receive response.
-Response data is extracted to output file (text file is recommended) and header
+This program will send an ONLY HTTP request to the server and receive a response.
+Response data is extracted to an output file (text file is recommended) and the header
 is saved to `log/header.txt`.
 
-Currently this program only have GET request mode.
+Currently, this program only has GET request mode.
 
 ## How to build:
 
-This will compile program which is targeted in [Makefile](https://github.com/DuckyMomo20012/socket-api-tester/blob/master/Makefile#L7).
+This will compile a program that is targeted in [Makefile](https://github.com/DuckyMomo20012/socket-api-tester/blob/master/Makefile#L7).
 
 ```bash
 make
@@ -41,88 +52,52 @@ make clean
 
 ## Program Requirements:
 
-Your linux should have installed these packages:
+Your Linux environment should have installed these packages:
 
-- gcc, g++
-- gdb
+- GCC, G++
+- GDB
+
+## Run program:
+
+- After the build, you will see an executable file name "main". You can change this
+  in Makefile, variable `TARGET`.
+
+- This program requires two arguments:
+
+  - `http website`: URL of **HTTP** website to send request (with a trailing
+    slash '/' ). Support both `Content-Length` response or `chunked` response E.g:
+    http://www.example.com/, http://info.cern.ch/.
+
+  - `output file`: File to write response. Recommend a text file (.txt). E.g:
+    out.txt, out.json.
+
+- Run executable:
+
+```bash
+./main http://www.example.com/ out.txt
+```
+
+OR
+
+```bash
+./main "http://www.example.com/" "out.txt"
+```
+
+- Types of responses in your output file:
+
+  - **Content-Length:** Entire body data.
+  - **chunked:** Length of current chunk in hexadecimal format + Chunk data.
+
+- Program will create a log folder containing two files:
+  - `header.txt`: Log response header
+  - `request.txt`: Log request history.
+
+> Socket will automatically timeout after 3.0 seconds without any responses. You
+> can change this in file `main.cpp`.
 
 ## Debug:
 
-This is debug file. You can change "args" arguments in launch.json.
-
-Ref: [C and Cpp Debugging in VS Code](https://github.com/bloominstituteoftechnology/CS-Wiki/wiki/C-and-Cpp-Debugging-in-VS-Code)
-
-<details>
-<summary>launch.json</summary>
-
-```json
-{
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "g++ - Build and debug active file",
-      "type": "cppdbg",
-      "request": "launch",
-      "program": "${workspaceFolder}/19127631",
-      "args": ["example.com", "out.txt"],
-      "stopAtEntry": false,
-      "cwd": "${fileDirname}",
-      "environment": [],
-      "externalConsole": false,
-      "MIMode": "gdb",
-      "setupCommands": [
-        {
-          "description": "Enable pretty-printing for gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
-        },
-        {
-          "description": "Set Disassembly Flavor to Intel",
-          "text": "-gdb-set disassembly-flavor intel",
-          "ignoreFailures": true
-        }
-      ],
-      "preLaunchTask": "C/C++: g++ build active file",
-      "miDebuggerPath": "/usr/bin/gdb"
-    }
-  ]
-}
-```
-
-</details>
-
-<details>
-<summary>tasks.json</summary>
-
-```json
-{
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "build",
-      "command": "make",
-      "args": [],
-      "problemMatcher": {
-        "owner": "cpp",
-        "fileLocation": ["relative", "${workspaceFolder}"],
-        "pattern": {
-          "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-          "file": 1,
-          "line": 2,
-          "column": 3,
-          "severity": 4,
-          "message": 5
-        }
-      }
-    }
-  ]
-}
-```
-
-</details>
+Read more: [C and Cpp Debugging in VS Code](https://github.com/bloominstituteoftechnology/CS-Wiki/wiki/C-and-Cpp-Debugging-in-VS-Code)
 
 ## TODO:
 

@@ -4,7 +4,7 @@ BUILD_DIR = ./.build
 SRC_DIRS := ./src
 CPP_VER := -std=c++17
 
-TARGET := "19127631"
+TARGET := "main"
 
 # Find all the C and C++ files we want to compile
 # Note the single quotes around the * expressions. Make will incorrectly expand these otherwise.
