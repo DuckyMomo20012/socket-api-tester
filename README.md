@@ -51,6 +51,8 @@
   - [Prerequisites](#bangbang-prerequisites)
   - [Run Locally](#running-run-locally)
 - [Usage](#eyes-usage)
+  - [Sending requests](#incoming_envelope-sending-requests)
+  - [Cleanup files](#sponge-cleanup-files)
 - [Debugging](#mag-debugging)
 - [Roadmap](#compass-roadmap)
 - [Contributing](#wave-contributing)
@@ -86,12 +88,12 @@ This project requires the following prerequisites:
 
 - Operating system: `Linux` and `macOS`.
 
-  > **NOTE**: This app only supports `Linux` and `macOS`. Currently not
+  > **Note**: This app only supports `Linux` and `macOS`. Currently not
   > supporting `Windows`.
 
-- GCC, G++
-- GDB
-- make
+- GCC, G++: `>= 10.2.1`.
+- GDB.
+- make.
 
 Install GCC, G++, GDB, and make:
 
@@ -132,6 +134,8 @@ Run program:
 
 ## :eyes: Usage
 
+### :incoming_envelope: Sending requests
+
 This program requires two arguments:
 
 - `http website`: URL of **HTTP** website to send request (with a trailing
@@ -158,7 +162,7 @@ Program will create a `log` folder containing two files:
 > double timeout_sec = 3.0;
 > ```
 
-Cleanup files:
+### :sponge: Cleanup files
 
 - This command will delete `.build` folder and compiled `main` program.
 
