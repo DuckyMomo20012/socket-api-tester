@@ -42,7 +42,6 @@ int main(int argc, char *argv[]) {
   char buffer[BUFFER_SIZE];
   string web{argv[1]};
   string outFile{argv[2]};
-  string host{argv[1]};
   string headerFile = "log/header.txt";
   string requestFile = "log/request.txt";
 
@@ -54,19 +53,28 @@ int main(int argc, char *argv[]) {
     cout << "WARNING: You should write data to text file (.txt) instead of "
          << "\"" << outFile << "\"" << endl;
   }
-  if (web.find("https://") != web.npos) {
+  if (web.find("http://") == web.npos) {
     cerr << "Please input a http website" << endl;
     exit(1);
-  } else if (web.find("http://") != web.npos) {
-    int pos = web.find("http://");
-    // Minus 1 for ("/") character;
-    host = host.substr(pos + strlen("http://"),
-                       host.length() - pos - strlen("http://") - 1);
   }
+
+  string host;
+  string uri = "/";
+  int HTTP_LEN = 7; // Length of "http://"
+
+  size_t slashPos = web.find("/", HTTP_LEN);
+
+  if (slashPos == web.npos) {
+    host = web.substr(HTTP_LEN);
+  } else {
+    host = web.substr(HTTP_LEN, slashPos - HTTP_LEN);
+    uri = web.substr(slashPos);
+  }
+
   // Because socket connect using host, so we have to extract it from website,
   // which is inputed from command.
   fd = socket_connect(const_cast<char *>(host.c_str()), PORT);
-  string req = get("/", {{"Host", host}, {"Connection: Keep-alive"}});
+  string req = get(uri, {{"Host", host}, {"Connection: Keep-alive"}});
   writeFile(requestFile, req, ios::app);
 
   write(fd, (const void *)req.c_str(),
@@ -87,7 +95,6 @@ int main(int argc, char *argv[]) {
     // TODO: Optimize header detection
     int pos = buff.find(endHeader);
 
-    // cout << buff;
     if (pos > 0) {
       isFileOpened = true;
       string header = buff.substr(0, pos + endHeader.length());
@@ -105,13 +112,10 @@ int main(int argc, char *argv[]) {
         writeFile(headerFile, header, ios::app);
       }
     } else if (isFileOpened) {
-      // cout << buff;
       writeFile(outFile, buff, ios::app);
     } else {
-      // cout << buff;
       writeFile(headerFile, buff, ios::app);
     }
-    // fprintf(stderr, "%s", buffer);
     bzero(buffer, BUFFER_SIZE);
   }
 
