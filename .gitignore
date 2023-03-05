@@ -1,6 +1,5 @@
 .vscode
 
-.history
 build
-
+dist
 log
