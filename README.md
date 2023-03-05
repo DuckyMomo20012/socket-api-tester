@@ -51,6 +51,7 @@
   - [Prerequisites](#bangbang-prerequisites)
   - [Run Locally](#running-run-locally)
 - [Usage](#eyes-usage)
+  - [Compile](#computer-compile)
   - [Sending requests](#incoming_envelope-sending-requests)
   - [Cleanup files](#sponge-cleanup-files)
 - [Debugging](#mag-debugging)
@@ -72,8 +73,12 @@
 
 - This program will send an **ONLY HTTP** request to the server and receive a
   response.
-- Response data is extracted to an output file (text file is recommended) and
-  the header is saved to `log/header.txt`.
+- Response data is extracted to an output file (text file is recommended).
+- Logging:
+
+  - Response header is saved to `log/header.txt`.
+  - Request history is saved to `log/request.txt`.
+
 - Currently, this program only has `GET` request mode.
 
 <!-- Getting Started -->
@@ -127,44 +132,92 @@ make
 Run program:
 
 ```bash
-./main "http://www.example.com/" "out.txt"
+./dist/main "http://www.example.com" "out.txt"
 ```
 
 <!-- Usage -->
 
 ## :eyes: Usage
 
+### :computer: Compile
+
+`Makefile` is provided for compiling. You can use `make` command to compile.
+
+Targets:
+
+- `all`: Compile all `*.cpp` files in `src` folder.
+
+  - Description:
+
+    - Compile all `*.cpp` files in `src` folder to `build` folder.
+
+    - `*.cpp` files in `src` folder will be compiled to `*.o` and `*.d` files in
+      `build` folder.
+
+    - The final executable file named `main` will be placed in `dist` folder.
+
+  - Usage:
+
+    ```bash
+    make all
+    ```
+
+- `clean`: Remove all compiled files:
+
+  - Description:
+
+    - Remove all files in `build` and `dist` folder.
+
+  - Usage:
+
+    ```bash
+    make clean
+    ```
+
 ### :incoming_envelope: Sending requests
 
-This program requires two arguments:
+- File `main`: Sending `GET` request to a website and save response to a file.
 
-- `http website`: URL of **HTTP** website to send request (with a trailing
-  slash '/' ). Support both `Content-Length` response or `chunked` response E.g:
-  `http://www.example.com/`, `http://info.cern.ch/`.
+  - Description:
 
-- `output file`: File to write response. Recommend a text file. E.g: `out.txt`,
-  `out.md`.
+    - Program will send a `GET` request to a website, accept both
+      `Content-Length` response and `chunked` response.
 
-Responses format in your output file depends on response type:
+    - Responses format in your output file depends on response type:
 
-- **Content-Length:** Entire body data.
-- **chunked:** Length of current chunk in hexadecimal format + Chunk data.
+      - **Content-Length:** Entire body data.
+      - **chunked:** Length of current chunk in hexadecimal format + Chunk data.
 
-Program will create a `log` folder containing two files:
+    - Program will create a `log` folder containing two files:
 
-- `header.txt`: Log response header
-- `request.txt`: Log request history.
+      - `header.txt`: Log response header
+      - `request.txt`: Log request history.
 
-> Socket will automatically timeout after **3.0 seconds** without any responses.
-> You can change this in file `main.cpp`. E.g:
->
-> ```C
-> double timeout_sec = 3.0;
-> ```
+      > Socket will automatically timeout after **3.0 seconds** without any
+      > responses. You can change this in file `main.cpp`. E.g:
+      >
+      > ```C
+      > double timeout_sec = 3.0;
+      > ```
+
+  - Usage:
+
+    ```bash
+    ./main <http website> <output file>
+    ```
+
+    Arguments:
+
+    - `http website`: URL of **HTTP** website to send request. Support both
+      `Content-Length` response or `chunked` response E.g:
+      `http://www.example.com`, `http://info.cern.ch`.
+
+    - `output file`: File to write response. A text file is recommended. E.g:
+      `out.txt`, `out.md`.
 
 ### :sponge: Cleanup files
 
-- This command will delete `.build` folder and compiled `main` program.
+- This command will delete `build` folder and compiled `main` program.
 
   ```bash
   make clean
@@ -174,7 +227,8 @@ Program will create a `log` folder containing two files:
 
 ## :mag: Debugging
 
-Read more: [C and Cpp Debugging in VS Code](https://github.com/bloominstituteoftechnology/CS-Wiki/wiki/C-and-Cpp-Debugging-in-VS-Code)
+Read more:
+[C and Cpp Debugging in VS Code](https://github.com/bloominstituteoftechnology/CS-Wiki/wiki/C-and-Cpp-Debugging-in-VS-Code)
 
 <!-- Roadmap -->
 
@@ -196,7 +250,8 @@ Contributions are always welcome!
 
 ### :scroll: Code of Conduct
 
-Please read the [Code of Conduct](https://github.com/DuckyMomo20012/socket-api-tester/blob/main/CODE_OF_CONDUCT.md).
+Please read the
+[Code of Conduct](https://github.com/DuckyMomo20012/socket-api-tester/blob/main/CODE_OF_CONDUCT.md).
 
 <!-- FAQ -->
 
@@ -223,9 +278,11 @@ for more information.
 
 ## :handshake: Contact
 
-Duong Vinh - [@duckymomo20012](https://twitter.com/duckymomo20012) - tienvinh.duong4@gmail.com
+Duong Vinh - [@duckymomo20012](https://twitter.com/duckymomo20012) -
+tienvinh.duong4@gmail.com
 
-Project Link: [https://github.com/DuckyMomo20012/socket-api-tester](https://github.com/DuckyMomo20012/socket-api-tester).
+Project Link:
+[https://github.com/DuckyMomo20012/socket-api-tester](https://github.com/DuckyMomo20012/socket-api-tester).
 
 <!-- Acknowledgments -->
 
