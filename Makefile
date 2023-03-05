@@ -1,6 +1,6 @@
 # Ref: Thanks to Job Vranish (https://spin.atomicobject.com/2016/08/26/makefile-c-projects/)
 .EXPORT_ALL_VARIABLES:
-BUILD_DIR = ./.build
+BUILD_DIR = ./build
 SRC_DIRS := ./src
 CPP_VER := -std=c++17
 
