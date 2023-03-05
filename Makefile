@@ -45,10 +45,12 @@ $(BUILD_DIR)/%.cpp.o: %.cpp
 	mkdir -p $(dir $@)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
+# RM is a predefined make variable. This is just a more verbose way of writing
+# 'rm -f'
 .PHONY: clean
 clean:
-	$(RM) $(TARGET)
-	rm -r $(BUILD_DIR)
+	$(RM) -r $(TARGET)
+	rm -rf $(BUILD_DIR)
 
 # Include the .d makefiles. The - at the front suppresses the errors of missing
 # Makefiles. Initially, all the .d files will be missing, and we don't want those
