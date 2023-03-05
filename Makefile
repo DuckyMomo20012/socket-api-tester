@@ -1,10 +1,12 @@
 # Ref: Thanks to Job Vranish (https://spin.atomicobject.com/2016/08/26/makefile-c-projects/)
 .EXPORT_ALL_VARIABLES:
 BUILD_DIR = ./build
+DIST_DIR = ./dist
+LOG_DIR = ./log
 SRC_DIRS := ./src
 CPP_VER := -std=c++17
 
-TARGET := "main"
+TARGET := "$(DIST_DIR)/main"
 
 # Find all the C and C++ files we want to compile
 # Note the single quotes around the * expressions. Make will incorrectly expand these otherwise.
@@ -32,7 +34,8 @@ all: $(TARGET)
 
 # The final build step.
 $(TARGET): $(OBJS)
-	mkdir -p log
+	mkdir -p $(DIST_DIR)
+	mkdir -p $(LOG_DIR)
 	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
 
 # Build step for C++ source
